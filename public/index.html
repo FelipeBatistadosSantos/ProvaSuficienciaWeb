@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Fotos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="app.js"></script>
+</head>
+<body class="container mt-4">
+    <header class="text-center mb-4">
+        <h1>Gerenciador de Fotos</h1>
+        <nav class="btn-group">
+            <button id="btnInserir" class="btn btn-primary">Inserir</button>
+            <button id="btnListar" class="btn btn-secondary">Listar</button>
+            <button id="btnAlterar" class="btn btn-warning">Alterar</button>
+            <button id="btnExcluir" class="btn btn-danger">Excluir</button>
+        </nav>
+    </header>
+    
+    <main id="content">
+        <section id="inserir" class="d-none">
+            <h2 class="text-center mb-4">Inserir Nova Foto</h2>
+            <form id="formInserir" class="mb-3">
+                <div class="mb-3 w-100">
+                    <input type="text" id="titulo" class="form-control" placeholder="Título da foto" required>
+                </div>
+                <div class="mb-3 w-100">
+                    <input type="url" id="url" class="form-control" placeholder="URL da imagem" required>
+                </div>
+                <div class="mb-3 w-100">
+                    <button type="submit" class="btn btn-success w-100">Adicionar</button>
+                </div>
+            </form>
+        </section>
+        
+        <section id="listar" class="d-none">
+            <h2 class="text-center mb-4">Lista de Fotos</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Imagem</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaFotos"></tbody>
+            </table>
+            <!-- Container para paginação -->
+            <nav aria-label="Navegação de páginas">
+                <ul id="pagination" class="pagination justify-content-center"></ul>
+            </nav>
+        </section>
+        
+        <section id="alterar" class="d-none">
+            <h2 class="text-center mb-4">Alterar Foto</h2>
+            <form id="formAlterar" class="mb-3">
+                <div class="mb-3 w-100">
+                    <input type="number" id="idAlterar" class="form-control" placeholder="ID da foto" required>
+                </div>
+                <div class="mb-3 w-100">
+                    <input type="text" id="novoTitulo" class="form-control" placeholder="Novo título">
+                </div>
+                <div class="mb-3 w-100">
+                    <input type="url" id="novaUrl" class="form-control" placeholder="Nova URL">
+                </div>
+                <div class="mb-3 w-100">
+                    <button id="btnConfirmarAlteracao" type="button" class="btn btn-warning w-100">Alterar</button>
+                </div>
+            </form>
+        </section>
+        
+        <section id="excluir" class="d-none">
+            <h2 class="text-center mb-4">Excluir Foto</h2>
+            <form id="formExcluir" class="mb-3">
+                <div class="mb-3 w-100">
+                    <input type="number" id="idExcluir" class="form-control" placeholder="ID da foto" required>
+                </div>
+                <div class="mb-3 w-100">
+                    <button id="btnConfirmarExclusao" type="button" class="btn btn-danger w-100">Excluir</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Modal de Confirmação para Exclusão -->
+    <div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmacaoModalLabel">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza que deseja excluir esta foto?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnExcluirConfirmado">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
