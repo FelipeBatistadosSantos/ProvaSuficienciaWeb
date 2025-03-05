@@ -3,90 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciador de Fotos</title>
+    <title>Gerenciador de Fotos - Cliente REST</title>
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- CSS Personalizado - Atualize este caminho -->
     <link rel="stylesheet" href="styles.css">
-    <script defer src="app.js"></script>
 </head>
-<body class="container mt-4">
-    <header class="text-center mb-4">
-        <h1>Gerenciador de Fotos</h1>
-        <nav class="btn-group">
-            <button id="btnInserir" class="btn btn-primary">Inserir</button>
-            <button id="btnListar" class="btn btn-secondary">Listar</button>
-            <button id="btnAlterar" class="btn btn-warning">Alterar</button>
-            <button id="btnExcluir" class="btn btn-danger">Excluir</button>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+            <div class="container">
+                <a class="navbar-brand" href="#">Gerenciador de Fotos</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="btnInserir">Inserir</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="btnListar">Listar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="btnAlterar">Alterar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="btnExcluir">Excluir</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="btnLixeira">
+                                <i class="bi bi-trash"></i> Lixeira
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </nav>
     </header>
-    
-    <main id="content">
-        <section id="inserir" class="d-none">
-            <h2 class="text-center mb-4">Inserir Nova Foto</h2>
-            <form id="formInserir" class="mb-3">
-                <div class="mb-3 w-100">
-                    <input type="text" id="titulo" class="form-control" placeholder="Título da foto" required>
+
+    <main class="container py-4">
+        <!-- Seção de Inserção -->
+        <section id="inserir">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Inserir Nova Foto</h2>
                 </div>
-                <div class="mb-3 w-100">
-                    <input type="url" id="url" class="form-control" placeholder="URL da imagem" required>
+                <div class="card-body">
+                    <form id="formInserir">
+                        <div class="mb-3">
+                            <label for="titulo" class="form-label">Título</label>
+                            <input type="text" class="form-control" id="titulo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="url" class="form-label">URL da Miniatura</label>
+                            <input type="url" class="form-control" id="url" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Adicionar Foto</button>
+                    </form>
                 </div>
-                <div class="mb-3 w-100">
-                    <button type="submit" class="btn btn-success w-100">Adicionar</button>
-                </div>
-            </form>
+            </div>
         </section>
-        
+
+        <!-- Seção de Listagem -->
         <section id="listar" class="d-none">
-            <h2 class="text-center mb-4">Lista de Fotos</h2>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Título</th>
-                        <th>Imagem</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelaFotos"></tbody>
-            </table>
-            <!-- Container para paginação -->
-            <nav aria-label="Navegação de páginas">
-                <ul id="pagination" class="pagination justify-content-center"></ul>
-            </nav>
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Lista de Fotos</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Título</th>
+                                    <th>Miniatura</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaFotos">
+                                <!-- Conteúdo preenchido dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <nav aria-label="Paginação">
+                        <ul class="pagination justify-content-center" id="pagination">
+                            <!-- Paginação preenchida dinamicamente -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
         </section>
-        
+
+        <!-- Seção de Alteração -->
         <section id="alterar" class="d-none">
-            <h2 class="text-center mb-4">Alterar Foto</h2>
-            <form id="formAlterar" class="mb-3">
-                <div class="mb-3 w-100">
-                    <input type="number" id="idAlterar" class="form-control" placeholder="ID da foto" required>
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Alterar Foto</h2>
                 </div>
-                <div class="mb-3 w-100">
-                    <input type="text" id="novoTitulo" class="form-control" placeholder="Novo título">
+                <div class="card-body">
+                    <form id="formAlterar">
+                        <div class="mb-3">
+                            <label for="idAlterar" class="form-label">ID da Foto</label>
+                            <input type="number" class="form-control" id="idAlterar" required>
+                            <input type="hidden" id="sourceAlterar">
+                        </div>
+                        <div class="mb-3">
+                            <label for="novoTitulo" class="form-label">Novo Título</label>
+                            <input type="text" class="form-control" id="novoTitulo">
+                        </div>
+                        <div class="mb-3">
+                            <label for="novaUrl" class="form-label">Nova URL</label>
+                            <input type="url" class="form-control" id="novaUrl">
+                        </div>
+                        <button type="button" class="btn btn-primary" id="btnConfirmarAlteracao">Alterar Foto</button>
+                    </form>
                 </div>
-                <div class="mb-3 w-100">
-                    <input type="url" id="novaUrl" class="form-control" placeholder="Nova URL">
-                </div>
-                <div class="mb-3 w-100">
-                    <button id="btnConfirmarAlteracao" type="button" class="btn btn-warning w-100">Alterar</button>
-                </div>
-            </form>
+            </div>
         </section>
-        
+
+        <!-- Seção de Exclusão -->
         <section id="excluir" class="d-none">
-            <h2 class="text-center mb-4">Excluir Foto</h2>
-            <form id="formExcluir" class="mb-3">
-                <div class="mb-3 w-100">
-                    <input type="number" id="idExcluir" class="form-control" placeholder="ID da foto" required>
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Excluir Foto</h2>
                 </div>
-                <div class="mb-3 w-100">
-                    <button id="btnConfirmarExclusao" type="button" class="btn btn-danger w-100">Excluir</button>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="idExcluir" class="form-label">ID da Foto</label>
+                        <input type="number" class="form-control" id="idExcluir" required>
+                    </div>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarExclusao">Buscar e Excluir</button>
                 </div>
-            </form>
+            </div>
+        </section>
+
+        <!-- Seção da Lixeira -->
+        <section id="lixeira" class="d-none">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Itens Excluídos</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Título</th>
+                                    <th>Miniatura</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaLixeira">
+                                <!-- Conteúdo preenchido dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
-    <!-- Modal de Confirmação para Exclusão -->
+    <!-- Modal de Confirmação -->
     <div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -95,7 +178,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    Tem certeza que deseja excluir esta foto?
+                    <p>Tem certeza que deseja excluir esta foto?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -105,6 +188,48 @@
         </div>
     </div>
 
+    <!-- Adicione este modal no final do body, antes dos scripts -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalhes da Foto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img id="previewImage" src="" alt="Preview" class="img-fluid rounded">
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Informações</h5>
+                            <dl class="row">
+                                <dt class="col-sm-3">ID:</dt>
+                                <dd class="col-sm-9" id="previewId"></dd>
+                                
+                                <dt class="col-sm-3">Título:</dt>
+                                <dd class="col-sm-9" id="previewTitle"></dd>
+                                
+                                <dt class="col-sm-3">URL:</dt>
+                                <dd class="col-sm-9"><a id="previewUrl" href="" target="_blank"></a></dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light text-center py-3 mt-4">
+        <div class="container">
+            <p class="mb-0">Cliente REST - Gerenciador de Fotos &copy; 2024</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Scripts da Aplicação - Módulos ES6 -->
+    <script type="module" src="js/index.js"></script>
 </body>
 </html>

@@ -1,87 +1,72 @@
+/* Variáveis de cores */
+:root {
+    --primary-color: #4a90e2;
+    --text-color: #2c3e50;
+    --background-light: #f8f9fa;
+    --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* Estilos gerais */
 body {
-    background-color: #f8f9fa;
+    background-color: var(--background-light);
+    color: var(--text-color);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
-h1 {
-    color: #343a40;
+/* Cursor pointer */
+a, button, .page-link, .nav-link, .table tr {
+    cursor: pointer;
 }
 
-/* Ocultar seções por padrão usando Bootstrap */
-.d-none {
-    display: none !important;
+/* Navbar */
+.navbar {
+    box-shadow: var(--card-shadow);
 }
 
-/* Estilizando a tabela */
-.table img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 5px;
+/* Cards */
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: var(--primary-color) !important;
+    color: white !important;
 }
 
 /* Formulários */
 form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    max-width: 400px; /* Limita o tamanho máximo do formulário */
+    max-width: 500px;
     width: 100%;
-    padding: 20px;
-    background-color: #fff;
+    margin: 0 auto;
+}
+
+/* Tabela */
+.table {
+    background-color: white;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
 }
 
-/* Botões */
-.btn {
-    margin: 5px;
+.table img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
 }
 
-/* Botões de ação na tabela */
-.btn-acao {
-    margin-right: 5px;
+/* Modal de visualização de imagem */
+.image-preview-modal .modal-body {
+    text-align: center;
+    padding: 20px;
 }
 
-/* Ícones para os botões */
-.acao-icon {
-    cursor: pointer;
-    margin: 0 5px;
-    font-size: 1.2rem;
+.image-preview-modal img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
 }
 
-.icon-editar {
-    color: #ffc107;
-}
-
-.icon-excluir {
-    color: #dc3545;
-}
-
-/* Paginação */
-.pagination {
-    margin-top: 20px;
-}
-
-.page-link {
-    color: #0d6efd;
-    cursor: pointer;
-}
-
-.page-item.active .page-link {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .table {
-        font-size: 0.85rem;
-    }
-    
-    .acao-icon {
-        font-size: 1rem;
-    }
-}
