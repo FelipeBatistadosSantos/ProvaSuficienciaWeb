@@ -15,6 +15,7 @@ class AppController {
     
     this.inicializarEventos();
     this.mostrarSecao("inserir");
+    this.listarFotos();
   }
 
   initializeElements() {
@@ -191,22 +192,25 @@ class AppController {
     this.mostrarSecao("alterar");
   }
 
-  handleFormInserir(event) {
+  async handleFormInserir(event) {
     event.preventDefault();
     const titulo = document.getElementById("titulo").value;
     const url = document.getElementById("url").value;
 
     if (titulo && url) {
       try {
-        photoService.addPhoto({ title: titulo, thumbnailUrl: url });
+        const novaFoto = await photoService.createPhoto({ title: titulo, thumbnailUrl: url });
         alert("Foto adicionada com sucesso!");
         this.formInserir.reset();
-        this.listarFotos();
+        this.state.todasFotosFiltradas.push(novaFoto); // Adiciona a nova foto à lista
+        this.listarFotos(); // Atualiza a listagem de fotos
         this.mostrarSecao("listar");
       } catch (error) {
         console.error("Erro ao adicionar foto:", error);
         alert("Erro ao adicionar foto. Verifique o console para mais detalhes.");
       }
+    } else {
+      alert("Por favor, preencha todos os campos.");
     }
   }
 
@@ -232,54 +236,53 @@ class AppController {
       });
   }
 
-  excluirFoto(id, source) {
+  async excluirFoto(id, source) {
     try {
-      if (photoService.moveToTrash(id, source)) {
-        alert("Foto movida para a lixeira!");
-        this.listarFotos();
+      if (source === "api") {
+        await photoService.deletePhoto(id);
       } else {
-        alert("Erro ao mover foto para a lixeira.");
+        photoService.moveToTrash(id, source);
       }
+      alert("Foto movida para a lixeira!");
+      this.listarFotos();
     } catch (error) {
       console.error("Erro ao mover para lixeira:", error);
       alert("Erro ao mover para lixeira.");
     }
   }
 
-  alterarFoto() {
+  async alterarFoto() {
     const id = document.getElementById("idAlterar").value;
     if (!id) {
       alert("Por favor, informe o ID da foto a ser alterada.");
       return;
     }
 
-    photoService.getPhotoById(id)
-      .then(foto => {
-        if (foto) {
-          const novoTitulo = document.getElementById("novoTitulo").value;
-          const novaUrl = document.getElementById("novaUrl").value;
-          const fotoAtualizada = photoService.updatePhoto(id, {
-            title: novoTitulo || foto.title,
-            thumbnailUrl: novaUrl || foto.thumbnailUrl,
-            source: foto.source
-          });
-          
-          if (fotoAtualizada || foto.source === "api") {
-            alert("Foto alterada com sucesso!");
-            document.getElementById("idAlterar").value = "";
-            document.getElementById("novoTitulo").value = "";
-            document.getElementById("novaUrl").value = "";
-            this.listarFotos();
-            this.mostrarSecao("listar");
-          }
-        } else {
-          alert("Foto não encontrada.");
+    try {
+      const foto = await photoService.getPhotoById(id);
+      if (foto) {
+        const novoTitulo = document.getElementById("novoTitulo").value;
+        const novaUrl = document.getElementById("novaUrl").value;
+        const fotoAtualizada = await photoService.updatePhoto(id, {
+          title: novoTitulo || foto.title,
+          thumbnailUrl: novaUrl || foto.thumbnailUrl
+        });
+        
+        if (fotoAtualizada) {
+          alert("Foto alterada com sucesso!");
+          document.getElementById("idAlterar").value = "";
+          document.getElementById("novoTitulo").value = "";
+          document.getElementById("novaUrl").value = "";
+          this.listarFotos();
+          this.mostrarSecao("listar");
         }
-      })
-      .catch(error => {
-        console.error("Erro ao buscar foto:", error);
-        alert("Erro ao buscar foto.");
-      });
+      } else {
+        alert("Foto não encontrada.");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar foto:", error);
+      alert("Erro ao buscar foto.");
+    }
   }
 
   mostrarLixeira() {

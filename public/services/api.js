@@ -1,4 +1,3 @@
-// services/api.js - Cliente REST
 export const API_URL = "https://jsonplaceholder.typicode.com";
 
 // Cliente REST genérico com métodos para CRUD
